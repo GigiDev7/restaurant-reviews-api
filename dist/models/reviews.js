@@ -29,6 +29,8 @@ const reviewSchema = new mongoose_1.default.Schema({
         ref: "Restaurant",
         required: true,
     },
+}, {
+    timestamps: true,
 });
 const Review = mongoose_1.default.model("Review", reviewSchema);
 exports.default = Review;
