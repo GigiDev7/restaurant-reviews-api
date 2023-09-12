@@ -5,7 +5,7 @@ const getRestaurants = async (
   minRating?: string,
   maxRating?: string
 ) => {
-  const limit = 5;
+  const limit = 6;
   const skip = (page - 1) * limit;
   let filters: any = {};
   if (minRating && maxRating) {

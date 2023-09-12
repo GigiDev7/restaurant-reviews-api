@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const restaurant_1 = __importDefault(require("../models/restaurant"));
 const getRestaurants = (page, minRating, maxRating) => __awaiter(void 0, void 0, void 0, function* () {
-    const limit = 5;
+    const limit = 6;
     const skip = (page - 1) * limit;
     let filters = {};
     if (minRating && maxRating) {
