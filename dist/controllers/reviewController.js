@@ -20,8 +20,8 @@ const addReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             comment: req.body.comment,
             date: req.body.date,
             rating: req.body.rating,
-            restaurantId: new mongoose_1.default.Types.ObjectId(req.body.restaurantId),
-            userId: new mongoose_1.default.Types.ObjectId(req.user.id),
+            restaurant: new mongoose_1.default.Types.ObjectId(req.body.restaurantId),
+            user: new mongoose_1.default.Types.ObjectId(req.user.id),
         });
         res.status(201).json(review);
     }

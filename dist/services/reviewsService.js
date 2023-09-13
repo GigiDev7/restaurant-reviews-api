@@ -18,7 +18,7 @@ const customError_1 = __importDefault(require("../utils/customError"));
 const errorTypes_1 = __importDefault(require("../utils/errorTypes"));
 const roundNumber_1 = require("../utils/roundNumber");
 const addReview = (reviewData) => __awaiter(void 0, void 0, void 0, function* () {
-    const restaurant = yield restaurant_1.default.findById(reviewData.restaurantId);
+    const restaurant = yield restaurant_1.default.findById(reviewData.restaurant);
     if (!restaurant) {
         throw new customError_1.default(errorTypes_1.default.NotFoundError, "Restaurant not found");
     }
@@ -40,10 +40,10 @@ const deleteReview = (userId, reviewId) => __awaiter(void 0, void 0, void 0, fun
     if (!review) {
         throw new customError_1.default(errorTypes_1.default.NotFoundError, "Review not found");
     }
-    if (!review.userId.equals(userId)) {
+    if (!review.user.equals(userId)) {
         throw new customError_1.default(errorTypes_1.default.AuthorizationError, "Authorization error");
     }
-    const restaurant = yield restaurant_1.default.findById(review.restaurantId);
+    const restaurant = yield restaurant_1.default.findById(review.restaurant);
     if (!restaurant) {
         throw new customError_1.default(errorTypes_1.default.NotFoundError, "Restaurant not found");
     }

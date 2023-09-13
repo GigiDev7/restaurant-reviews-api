@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const restaurantServices_1 = __importDefault(require("../services/restaurantServices"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const getAllRestaurants = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let page = 1;
@@ -26,6 +27,17 @@ const getAllRestaurants = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         next(error);
     }
 });
+const getSingleRestaurant = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const restaurantId = new mongoose_1.default.Types.ObjectId(req.params.restaurantId);
+        const result = yield restaurantServices_1.default.getSingleRestaurant(restaurantId);
+        res.status(200).json(result);
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.default = {
     getAllRestaurants,
+    getSingleRestaurant,
 };

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const reviewSchema = new mongoose_1.default.Schema({
-    userId: {
+    user: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: "User",
         required: true,
@@ -24,7 +24,7 @@ const reviewSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
-    restaurantId: {
+    restaurant: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: "Restaurant",
         required: true,

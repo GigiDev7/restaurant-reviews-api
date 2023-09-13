@@ -7,5 +7,6 @@ const router = express.Router();
 router.use(protectAuth);
 
 router.get("/", restaurantsController.getAllRestaurants);
+router.get("/:restaurantId", restaurantsController.getSingleRestaurant);
 
 export default router;

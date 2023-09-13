@@ -8,8 +8,8 @@ const addReview = async (req: Request, res: Response, next: NextFunction) => {
       comment: req.body.comment,
       date: req.body.date,
       rating: req.body.rating,
-      restaurantId: new mongoose.Types.ObjectId(req.body.restaurantId),
-      userId: new mongoose.Types.ObjectId(req.user!.id),
+      restaurant: new mongoose.Types.ObjectId(req.body.restaurantId),
+      user: new mongoose.Types.ObjectId(req.user!.id),
     });
     res.status(201).json(review);
   } catch (error) {

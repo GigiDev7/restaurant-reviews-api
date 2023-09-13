@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import restaurantServices from "../services/restaurantServices";
+import mongoose from "mongoose";
 
 const getAllRestaurants = async (
   req: Request,
@@ -23,6 +24,21 @@ const getAllRestaurants = async (
   }
 };
 
+const getSingleRestaurant = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const restaurantId = new mongoose.Types.ObjectId(req.params.restaurantId);
+    const result = await restaurantServices.getSingleRestaurant(restaurantId);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getAllRestaurants,
+  getSingleRestaurant,
 };

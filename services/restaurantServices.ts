@@ -1,4 +1,8 @@
+import mongoose from "mongoose";
 import Restaurant from "../models/restaurant";
+import CustomError from "../utils/customError";
+import Errors from "../utils/errorTypes";
+import Review from "../models/reviews";
 
 const getRestaurants = async (
   page: number,
@@ -25,31 +29,6 @@ const getRestaurants = async (
       $limit: limit,
     },
     {
-      $lookup: {
-        from: "reviews",
-        localField: "reviews",
-        foreignField: "_id",
-        as: "reviews",
-        pipeline: [
-          {
-            $lookup: {
-              from: "users",
-              localField: "userId",
-              foreignField: "_id",
-              as: "user",
-              pipeline: [{ $unset: ["__v", "password"] }],
-            },
-          },
-          {
-            $unset: ["__v", "restaurantId", "userId"],
-          },
-          {
-            $sort: { date: -1 },
-          },
-        ],
-      },
-    },
-    {
       $unset: ["__v"],
     },
     {
@@ -60,6 +39,36 @@ const getRestaurants = async (
   return { results, totalCount };
 };
 
+const getSingleRestaurant = async (restaurantId: mongoose.Types.ObjectId) => {
+  const restaurant = await Restaurant.findById(restaurantId, "-__v").populate({
+    path: "reviews",
+    select: "-__v",
+    options: { sort: { date: -1 } },
+    populate: { path: "user", select: "-password -__v" },
+  });
+  if (!restaurant) {
+    throw new CustomError(Errors.NotFoundError, "Restaurant not found");
+  }
+
+  let reviewMin = null;
+  let reviewMax = null;
+
+  if (restaurant.reviews.length > 1) {
+    reviewMin = await Review.find({ restaurant: restaurantId }, "-__v")
+      .sort({ rating: 1 })
+      .limit(1)
+      .populate("user", "-password -__v");
+
+    reviewMax = await Review.find({ restaurant: restaurantId }, "-__v")
+      .sort({ rating: -1 })
+      .limit(1)
+      .populate("user", "-password -__v");
+  }
+
+  return { restaurant, reviewMax, reviewMin };
+};
+
 export default {
   getRestaurants,
+  getSingleRestaurant,
 };

@@ -13,6 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const restaurant_1 = __importDefault(require("../models/restaurant"));
+const customError_1 = __importDefault(require("../utils/customError"));
+const errorTypes_1 = __importDefault(require("../utils/errorTypes"));
+const reviews_1 = __importDefault(require("../models/reviews"));
 const getRestaurants = (page, minRating, maxRating) => __awaiter(void 0, void 0, void 0, function* () {
     const limit = 6;
     const skip = (page - 1) * limit;
@@ -32,31 +35,6 @@ const getRestaurants = (page, minRating, maxRating) => __awaiter(void 0, void 0,
             $limit: limit,
         },
         {
-            $lookup: {
-                from: "reviews",
-                localField: "reviews",
-                foreignField: "_id",
-                as: "reviews",
-                pipeline: [
-                    {
-                        $lookup: {
-                            from: "users",
-                            localField: "userId",
-                            foreignField: "_id",
-                            as: "user",
-                            pipeline: [{ $unset: ["__v", "password"] }],
-                        },
-                    },
-                    {
-                        $unset: ["__v", "restaurantId", "userId"],
-                    },
-                    {
-                        $sort: { date: -1 },
-                    },
-                ],
-            },
-        },
-        {
             $unset: ["__v"],
         },
         {
@@ -65,6 +43,31 @@ const getRestaurants = (page, minRating, maxRating) => __awaiter(void 0, void 0,
     ]);
     return { results, totalCount };
 });
+const getSingleRestaurant = (restaurantId) => __awaiter(void 0, void 0, void 0, function* () {
+    const restaurant = yield restaurant_1.default.findById(restaurantId, "-__v").populate({
+        path: "reviews",
+        select: "-__v",
+        options: { sort: { date: -1 } },
+        populate: { path: "user", select: "-password -__v" },
+    });
+    if (!restaurant) {
+        throw new customError_1.default(errorTypes_1.default.NotFoundError, "Restaurant not found");
+    }
+    let reviewMin = null;
+    let reviewMax = null;
+    if (restaurant.reviews.length > 1) {
+        reviewMin = yield reviews_1.default.find({ restaurant: restaurantId }, "-__v")
+            .sort({ rating: 1 })
+            .limit(1)
+            .populate("user", "-password -__v");
+        reviewMax = yield reviews_1.default.find({ restaurant: restaurantId }, "-__v")
+            .sort({ rating: -1 })
+            .limit(1)
+            .populate("user", "-password -__v");
+    }
+    return { restaurant, reviewMax, reviewMin };
+});
 exports.default = {
     getRestaurants,
+    getSingleRestaurant,
 };

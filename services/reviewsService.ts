@@ -6,13 +6,13 @@ import Errors from "../utils/errorTypes";
 import { roundNum } from "../utils/roundNumber";
 
 const addReview = async (reviewData: {
-  userId: mongoose.Types.ObjectId;
-  restaurantId: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
+  restaurant: mongoose.Types.ObjectId;
   comment: string;
   date: Date;
   rating: number;
 }) => {
-  const restaurant = await Restaurant.findById(reviewData.restaurantId);
+  const restaurant = await Restaurant.findById(reviewData.restaurant);
   if (!restaurant) {
     throw new CustomError(Errors.NotFoundError, "Restaurant not found");
   }
@@ -44,11 +44,11 @@ const deleteReview = async (
     throw new CustomError(Errors.NotFoundError, "Review not found");
   }
 
-  if (!review.userId.equals(userId)) {
+  if (!review.user.equals(userId)) {
     throw new CustomError(Errors.AuthorizationError, "Authorization error");
   }
 
-  const restaurant = await Restaurant.findById(review.restaurantId);
+  const restaurant = await Restaurant.findById(review.restaurant);
   if (!restaurant) {
     throw new CustomError(Errors.NotFoundError, "Restaurant not found");
   }
