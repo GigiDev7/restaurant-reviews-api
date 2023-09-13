@@ -65,7 +65,11 @@ const getSingleRestaurant = async (restaurantId: mongoose.Types.ObjectId) => {
       .populate("user", "-password -__v");
   }
 
-  return { restaurant, reviewMax, reviewMin };
+  return {
+    restaurant,
+    reviewMax: reviewMax ? reviewMax[0] : null,
+    reviewMin: reviewMin ? reviewMin[0] : null,
+  };
 };
 
 export default {

@@ -65,7 +65,11 @@ const getSingleRestaurant = (restaurantId) => __awaiter(void 0, void 0, void 0, 
             .limit(1)
             .populate("user", "-password -__v");
     }
-    return { restaurant, reviewMax, reviewMin };
+    return {
+        restaurant,
+        reviewMax: reviewMax ? reviewMax[0] : null,
+        reviewMin: reviewMin ? reviewMin[0] : null,
+    };
 });
 exports.default = {
     getRestaurants,
