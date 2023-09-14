@@ -46,6 +46,7 @@ const loginUser = (email, password) => __awaiter(void 0, void 0, void 0, functio
     }
     const token = jsonwebtoken_1.default.sign({ id: user._id }, process.env.JWT_SECRET);
     return {
+        _id: user._id,
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email,

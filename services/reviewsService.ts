@@ -56,11 +56,16 @@ const deleteReview = async (
   restaurant.reviews = restaurant.reviews.filter(
     (rev) => !rev.equals(review._id)
   );
-  const sumRatings =
-    restaurant.averageRating! * (restaurant.reviews.length + 1);
-  restaurant.averageRating = roundNum(
-    (sumRatings - review.rating) / restaurant.reviews.length
-  );
+
+  if (restaurant.reviews.length === 0) {
+    restaurant.averageRating = 0;
+  } else {
+    const sumRatings =
+      restaurant.averageRating! * (restaurant.reviews.length + 1);
+    restaurant.averageRating = roundNum(
+      (sumRatings - review.rating) / restaurant.reviews.length
+    );
+  }
 
   await restaurant.save();
   await review.deleteOne();

@@ -48,6 +48,7 @@ const loginUser = async (email: string, password: string) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string);
 
   return {
+    _id: user._id,
     firstname: user.firstname,
     lastname: user.lastname,
     email: user.email,

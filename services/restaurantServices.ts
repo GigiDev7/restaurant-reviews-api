@@ -53,7 +53,7 @@ const getSingleRestaurant = async (restaurantId: mongoose.Types.ObjectId) => {
   let reviewMin = null;
   let reviewMax = null;
 
-  if (restaurant.reviews.length > 1) {
+  if (restaurant.reviews.length > 2) {
     reviewMin = await Review.find({ restaurant: restaurantId }, "-__v")
       .sort({ rating: 1 })
       .limit(1)

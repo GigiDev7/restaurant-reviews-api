@@ -55,7 +55,7 @@ const getSingleRestaurant = (restaurantId) => __awaiter(void 0, void 0, void 0, 
     }
     let reviewMin = null;
     let reviewMax = null;
-    if (restaurant.reviews.length > 1) {
+    if (restaurant.reviews.length > 2) {
         reviewMin = yield reviews_1.default.find({ restaurant: restaurantId }, "-__v")
             .sort({ rating: 1 })
             .limit(1)
