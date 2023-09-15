@@ -3,7 +3,6 @@ import Review from "../models/reviews";
 import Restaurant from "../models/restaurant";
 import CustomError from "../utils/customError";
 import Errors from "../utils/errorTypes";
-import { roundNum } from "../utils/roundNumber";
 
 const addReview = async (reviewData: {
   user: mongoose.Types.ObjectId;
@@ -19,17 +18,6 @@ const addReview = async (reviewData: {
 
   const review = await Review.create(reviewData);
   restaurant.reviews.push(review._id);
-
-  //Update average rating
-  if (!restaurant.averageRating) {
-    restaurant.averageRating = reviewData.rating;
-  } else {
-    const sumRatings =
-      restaurant.averageRating * (restaurant.reviews.length - 1);
-    restaurant.averageRating = roundNum(
-      (sumRatings + reviewData.rating) / restaurant.reviews.length
-    );
-  }
 
   await restaurant.save();
   return review;
@@ -56,16 +44,6 @@ const deleteReview = async (
   restaurant.reviews = restaurant.reviews.filter(
     (rev) => !rev.equals(review._id)
   );
-
-  if (restaurant.reviews.length === 0) {
-    restaurant.averageRating = 0;
-  } else {
-    const sumRatings =
-      restaurant.averageRating! * (restaurant.reviews.length + 1);
-    restaurant.averageRating = roundNum(
-      (sumRatings - review.rating) / restaurant.reviews.length
-    );
-  }
 
   await restaurant.save();
   await review.deleteOne();
