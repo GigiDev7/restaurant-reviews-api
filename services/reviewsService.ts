@@ -19,6 +19,16 @@ const addReview = async (reviewData: {
   const review = await Review.create(reviewData);
   restaurant.reviews.push(review._id);
 
+  //Update average rating
+  if (!restaurant.averageRating) {
+    restaurant.averageRating = reviewData.rating;
+  } else {
+    const sumRatings =
+      restaurant.averageRating * (restaurant.reviews.length - 1);
+    restaurant.averageRating =
+      (sumRatings + reviewData.rating) / restaurant.reviews.length;
+  }
+
   await restaurant.save();
   return review;
 };
@@ -44,6 +54,16 @@ const deleteReview = async (
   restaurant.reviews = restaurant.reviews.filter(
     (rev) => !rev.equals(review._id)
   );
+
+  //Update average rating
+  if (restaurant.reviews.length === 0) {
+    restaurant.averageRating = 0;
+  } else {
+    const sumRatings =
+      restaurant.averageRating! * (restaurant.reviews.length + 1);
+    restaurant.averageRating =
+      (sumRatings - review.rating) / restaurant.reviews.length;
+  }
 
   await restaurant.save();
   await review.deleteOne();

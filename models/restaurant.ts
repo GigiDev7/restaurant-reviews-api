@@ -11,7 +11,10 @@ const restaurantSchema = new mongoose.Schema(
       required: true,
     },
     imageUrl: String,
-    averageRating: Number,
+    averageRating: {
+      type: Number,
+      default: 0,
+    },
     reviews: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Review",

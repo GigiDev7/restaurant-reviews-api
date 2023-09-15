@@ -35,22 +35,6 @@ const getRestaurants = (page, minRating, maxRating) => __awaiter(void 0, void 0,
             $limit: limit,
         },
         {
-            $lookup: {
-                from: "reviews",
-                localField: "reviews",
-                foreignField: "_id",
-                as: "reviews",
-                pipeline: [
-                    {
-                        $unset: ["__v"],
-                    },
-                ],
-            },
-        },
-        {
-            $set: { averageRating: { $avg: "$reviews.rating" } },
-        },
-        {
             $unset: ["__v"],
         },
         {
@@ -60,49 +44,18 @@ const getRestaurants = (page, minRating, maxRating) => __awaiter(void 0, void 0,
     return { results, totalCount };
 });
 const getSingleRestaurant = (restaurantId) => __awaiter(void 0, void 0, void 0, function* () {
-    const restaurant = yield restaurant_1.default.aggregate([
-        {
-            $match: { _id: restaurantId },
-        },
-        {
-            $lookup: {
-                from: "reviews",
-                localField: "reviews",
-                foreignField: "_id",
-                as: "reviews",
-                pipeline: [
-                    {
-                        $lookup: {
-                            from: "users",
-                            localField: "user",
-                            foreignField: "_id",
-                            as: "user",
-                            pipeline: [
-                                {
-                                    $unset: ["__v", "password"],
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        $unset: ["__v"],
-                    },
-                    {
-                        $sort: { date: -1 },
-                    },
-                ],
-            },
-        },
-        {
-            $set: { averageRating: { $avg: "$reviews.rating" } },
-        },
-    ]);
-    if (!restaurant.length) {
+    const restaurant = yield restaurant_1.default.findById(restaurantId, "-__v").populate({
+        path: "reviews",
+        select: "-__v",
+        options: { sort: { date: -1 } },
+        populate: { path: "user", select: "-password -__v" },
+    });
+    if (!restaurant) {
         throw new customError_1.default(errorTypes_1.default.NotFoundError, "Restaurant not found");
     }
     let reviewMin = null;
     let reviewMax = null;
-    if (restaurant[0].reviews.length > 2) {
+    if (restaurant.reviews.length > 2) {
         reviewMin = yield reviews_1.default.find({ restaurant: restaurantId }, "-__v")
             .sort({ rating: 1 })
             .limit(1)
@@ -113,7 +66,7 @@ const getSingleRestaurant = (restaurantId) => __awaiter(void 0, void 0, void 0, 
             .populate("user", "-password -__v");
     }
     return {
-        restaurant: restaurant[0],
+        restaurant,
         reviewMax: reviewMax ? reviewMax[0] : null,
         reviewMin: reviewMin ? reviewMin[0] : null,
     };

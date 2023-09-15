@@ -23,6 +23,15 @@ const addReview = (reviewData) => __awaiter(void 0, void 0, void 0, function* ()
     }
     const review = yield reviews_1.default.create(reviewData);
     restaurant.reviews.push(review._id);
+    //Update average rating
+    if (!restaurant.averageRating) {
+        restaurant.averageRating = reviewData.rating;
+    }
+    else {
+        const sumRatings = restaurant.averageRating * (restaurant.reviews.length - 1);
+        restaurant.averageRating =
+            (sumRatings + reviewData.rating) / restaurant.reviews.length;
+    }
     yield restaurant.save();
     return review;
 });
@@ -39,6 +48,15 @@ const deleteReview = (userId, reviewId) => __awaiter(void 0, void 0, void 0, fun
         throw new customError_1.default(errorTypes_1.default.NotFoundError, "Restaurant not found");
     }
     restaurant.reviews = restaurant.reviews.filter((rev) => !rev.equals(review._id));
+    //Update average rating
+    if (restaurant.reviews.length === 0) {
+        restaurant.averageRating = 0;
+    }
+    else {
+        const sumRatings = restaurant.averageRating * (restaurant.reviews.length + 1);
+        restaurant.averageRating =
+            (sumRatings - review.rating) / restaurant.reviews.length;
+    }
     yield restaurant.save();
     yield review.deleteOne();
 });
