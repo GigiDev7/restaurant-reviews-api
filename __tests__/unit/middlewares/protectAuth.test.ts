@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
-import User from "../../models/user";
-import protectAuth from "../../middlewares/protectAuth";
+import User from "../../../models/user";
+import protectAuth from "../../../middlewares/protectAuth";
 
 jest.mock("jsonwebtoken");
-jest.mock("../../models/user");
+jest.mock("../../../models/user");
 
 const reqWithoutJWT: any = { headers: {} };
 const reqWithJWT: any = { headers: { authorization: "Bearer token" } };

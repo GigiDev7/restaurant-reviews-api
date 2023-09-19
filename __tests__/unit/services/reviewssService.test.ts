@@ -1,9 +1,9 @@
-import Review from "../../models/reviews";
-import Restaurant from "../../models/restaurant";
-import reviewsService from "../../services/reviewsService";
+import Review from "../../../models/reviews";
+import Restaurant from "../../../models/restaurant";
+import reviewsService from "../../../services/reviewsService";
 
-jest.mock("../../models/reviews");
-jest.mock("../../models/restaurant");
+jest.mock("../../../models/reviews");
+jest.mock("../../../models/restaurant");
 
 const review = {
   comment: "comment",

@@ -1,9 +1,9 @@
-import restaurantsController from "../../controllers/restaurantsController";
-import errorHandler from "../../middlewares/errorHandler";
-import restaurantServices from "../../services/restaurantServices";
+import restaurantsController from "../../../controllers/restaurantsController";
+import errorHandler from "../../../middlewares/errorHandler";
+import restaurantServices from "../../../services/restaurantServices";
 import mongoose from "mongoose";
 
-jest.mock("../../services/restaurantServices");
+jest.mock("../../../services/restaurantServices");
 jest.mock("mongoose");
 
 const req: any = {

@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../../models/user";
-import userService from "../../services/userService";
+import User from "../../../models/user";
+import userService from "../../../services/userService";
 
 jest.mock("bcrypt");
 jest.mock("jsonwebtoken");
-jest.mock("../../models/user");
+jest.mock("../../../models/user");
 
 describe("user services", () => {
   test("REGISTER ERROR: it should throw error on registration", async () => {

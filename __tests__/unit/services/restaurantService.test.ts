@@ -1,9 +1,9 @@
-import restaurantServices from "../../services/restaurantServices";
-import Restaurant from "../../models/restaurant";
-import Review from "../../models/reviews";
+import restaurantServices from "../../../services/restaurantServices";
+import Restaurant from "../../../models/restaurant";
+import Review from "../../../models/reviews";
 
-jest.mock("../../models/restaurant");
-jest.mock("../../models/reviews");
+jest.mock("../../../models/restaurant");
+jest.mock("../../../models/reviews");
 
 const restaurantData = [
   { _id: "1", reviews: [], name: "rest 1" },

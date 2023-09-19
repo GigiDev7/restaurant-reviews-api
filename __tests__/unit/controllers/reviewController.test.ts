@@ -1,11 +1,11 @@
-import reviewController from "../../controllers/reviewController";
-import errorHandler from "../../middlewares/errorHandler";
-import reviewsService from "../../services/reviewsService";
+import reviewController from "../../../controllers/reviewController";
+import errorHandler from "../../../middlewares/errorHandler";
+import reviewsService from "../../../services/reviewsService";
 import mongoose from "mongoose";
-import CustomError from "../../utils/customError";
-import Errors from "../../utils/errorTypes";
+import CustomError from "../../../utils/customError";
+import Errors from "../../../utils/errorTypes";
 
-jest.mock("../../services/reviewsService");
+jest.mock("../../../services/reviewsService");
 jest.mock("mongoose");
 
 const req: any = {

@@ -1,7 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import "./connectDB";
 import errorHandler from "./middlewares/errorHandler";
 import userRouter from "./routes/userRoutes";
 import restaurantRouter from "./routes/restaurantRoutes";
@@ -23,8 +22,4 @@ app.use("/api/review", reviewRouter);
 //Error handler middleware
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 8000;
-
-app.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`);
-});
+export default app;

@@ -1,10 +1,10 @@
-import userController from "../../controllers/userController";
-import userService from "../../services/userService";
-import CustomError from "../../utils/customError";
-import Errors from "../../utils/errorTypes";
-import errorHandler from "../../middlewares/errorHandler";
+import userController from "../../../controllers/userController";
+import userService from "../../../services/userService";
+import CustomError from "../../../utils/customError";
+import Errors from "../../../utils/errorTypes";
+import errorHandler from "../../../middlewares/errorHandler";
 
-jest.mock("../../services/userService");
+jest.mock("../../../services/userService");
 
 const req: any = {
   body: {

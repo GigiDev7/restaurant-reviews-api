@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
-require("./connectDB");
 const errorHandler_1 = __importDefault(require("./middlewares/errorHandler"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const restaurantRoutes_1 = __importDefault(require("./routes/restaurantRoutes"));
@@ -22,7 +21,4 @@ app.use("/api/restaurant", restaurantRoutes_1.default);
 app.use("/api/review", reviewRoutes_1.default);
 //Error handler middleware
 app.use(errorHandler_1.default);
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`);
-});
+exports.default = app;
